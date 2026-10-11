@@ -1,21 +1,8 @@
 import './style.css'
+import { initAscii } from './ascii'
 
-// Elemente mit der Klasse "reveal" blenden beim Scrollen ein
-const reveals = document.querySelectorAll<HTMLElement>('.reveal')
-
-const observer = new IntersectionObserver(
-  (entries) => {
-    for (const entry of entries) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible')
-        observer.unobserve(entry.target)
-      }
-    }
-  },
-  { threshold: 0.15 },
-)
-
-reveals.forEach((el) => observer.observe(el))
+// ASCII-Ränder links und rechts, die beim Scrollen mitwandern
+initAscii(document.querySelector<HTMLCanvasElement>('#ascii'))
 
 // Jahreszahl im Footer automatisch setzen
 const year = document.querySelector<HTMLElement>('#year')

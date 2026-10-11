@@ -1,54 +1,56 @@
 @import "tailwindcss";
+@import "@fontsource-variable/jetbrains-mono";
 
-/* Farben und Schrift – hier kannst du das Design an dein Logo anpassen */
+/*
+  Farben und Schrift.
+  Seite umdrehen (Schwarz mit weißer Schrift)? Tausch einfach die Werte
+  von --color-paper und --color-ink und passe --color-line und --color-muted an.
+*/
 @theme {
-  --color-bg: #0b0f14;
-  --color-surface: #121923;
-  --color-line: #1f2a37;
-  --color-accent: #3ddc97;
-  --color-muted: #8a99ab;
+  --color-paper: #ffffff;
+  --color-ink: #000000;
+  --color-line: #d4d4d4;
+  --color-muted: #595959;
 
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --font-mono: ui-monospace, "JetBrains Mono", "Fira Code", Consolas, monospace;
+  --font-sans: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 4.5rem; /* Platz für den fixen Header */
+  scroll-padding-top: 5rem; /* Platz für den fixen Header */
 }
 
-/* Dezenter Platinen-Raster-Hintergrund für den Hero */
-.circuit-bg {
-  background-image:
-    radial-gradient(circle at 1px 1px, rgb(255 255 255 / 0.06) 1px, transparent 0),
-    radial-gradient(ellipse at 80% 0%, rgb(61 220 151 / 0.12), transparent 55%);
-  background-size:
-    28px 28px,
-    100% 100%;
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
 }
 
-/* Einblend-Animation beim Scrollen (wird in main.ts ausgelöst) */
-.reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition:
-    opacity 0.7s ease,
-    transform 0.7s ease;
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
 }
 
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
+@layer components {
+  .btn {
+    @apply inline-block border border-ink px-6 py-3 text-sm font-semibold transition-colors;
+  }
+  .btn-solid {
+    @apply bg-ink text-paper hover:bg-paper hover:text-ink;
+  }
+  .btn-line {
+    @apply bg-paper text-ink hover:bg-ink hover:text-paper;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
+}
 
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
+@media print {
+  #ascii {
+    display: none;
   }
 }
