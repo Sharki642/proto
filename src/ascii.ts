@@ -1,7 +1,9 @@
-// ASCII-Ränder: links und rechts neben dem Text laufen schwarze Zeichen-Wellen,
-// ähnlich wie das Signal auf einem Oszilloskop. Die Wellen hängen direkt an deinem
-// Scrollen: Sie wandern und verformen sich mit jedem Scroll-Schritt, werden dicker
-// und unruhiger, je schneller du scrollst, und driften im Stillstand leicht weiter.
+// ASCII-Ränder: links und rechts neben dem Text laufen Zeichen-Wellen, ähnlich wie
+// das Signal auf einem Oszilloskop. Die Farbe folgt dem Verlauf aus dem Logo: ganz
+// außen am Fensterrand schwarz, nach innen über viele Grautöne bis Weiß.
+// Die Wellen hängen direkt an deinem Scrollen: Sie wandern und verformen sich mit
+// jedem Scroll-Schritt, werden dicker und unruhiger, je schneller du scrollst, und
+// driften im Stillstand leicht weiter.
 
 const RAMP = ' .:-=+*#%@' // dünn → dicht
 const GLITCH = '01#*+=:' // Zeichen, die bei schnellem Scrollen aufblitzen
@@ -9,7 +11,8 @@ const CONTENT_WIDTH = 896 // muss zu max-w-4xl im HTML passen
 const CONTENT_PADDING = 24 // px-6 im HTML
 const GAP = 12 // Abstand zwischen Rand und Text in px
 const MIN_COLS = 4 // schmalere Ränder (Handy, kleines Fenster) bleiben leer
-const MAX_COLS = 28 // so viele Zeichen breit ist ein Rand höchstens
+const MAX_COLS = 32 // so viele Zeichen breit ist ein Rand höchstens
+const GRADIENT_GAMMA = 0.6 // >1 = länger dunkel am Rand, <1 = schneller hell
 const FONT_SIZE = 15
 const LINE_HEIGHT = 18
 const PARALLAX = 0.6 // 1 = so schnell wie die Seite, kleiner = langsamer
@@ -36,6 +39,25 @@ function hash(x: number, y: number): number {
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296
 }
 
+type Rgb = [number, number, number]
+
+// Liest eine Farbe (#rgb, #rrggbb oder rgb(...)) aus einer CSS-Variable der Seite
+function readColor(name: string, fallback: Rgb): Rgb {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+
+  const hex = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(raw)
+  if (hex) {
+    let h = hex[1] ?? ''
+    if (h.length === 3) h = h.replace(/./g, (x) => x + x)
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]
+  }
+
+  const rgb = /^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/i.exec(raw)
+  if (rgb) return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])]
+
+  return fallback
+}
+
 export function initAscii(canvas: HTMLCanvasElement | null): void {
   if (!canvas) return
   const ctx = canvas.getContext('2d')
@@ -48,7 +70,7 @@ export function initAscii(canvas: HTMLCanvasElement | null): void {
   let height = 0
   let cellW = FONT_SIZE * 0.6
   let cols = 0
-  let ink = '#000'
+  let shades: string[] = [] // Farbe je Spalte, von außen (Tinte) nach innen (Papier)
   let scrollY = window.scrollY
   let lastScrollY = scrollY
   let energy = 0 // 0 = Ruhe, 1 = schnelles Scrollen
@@ -77,7 +99,6 @@ export function initAscii(canvas: HTMLCanvasElement | null): void {
     const sigmaBase = 0.7 + energy * 1.2
     const thin = Math.max(0.4, Math.min(1, cols / 14)) // schmale Ränder bekommen dünnere Spuren
 
-    ctx.fillStyle = ink
     ctx.globalAlpha = 1
 
     for (let row = 0; row < rows; row++) {
@@ -93,8 +114,8 @@ export function initAscii(canvas: HTMLCanvasElement | null): void {
         }
 
         for (let c = 0; c < cols; c++) {
-          // c = 0 ist ganz außen am Fensterrand, zum Text hin wird es dünner
-          const fall = Math.min(1, (1 - c / cols) * 2.2)
+          // c = 0 ist ganz außen am Fensterrand, zum Text hin wird es dünner und heller
+          const fall = Math.min(1, (1 - c / cols) * 3)
 
           let g = 0
           for (let i = 0; i < TRACES.length; i++) {
@@ -120,6 +141,7 @@ export function initAscii(canvas: HTMLCanvasElement | null): void {
 
           if (ch === '') continue
           const px = side === 0 ? c * cellW : width - (c + 1) * cellW
+          ctx.fillStyle = shades[c] ?? '#000'
           ctx.fillText(ch, px, y)
         }
       }
@@ -138,13 +160,24 @@ export function initAscii(canvas: HTMLCanvasElement | null): void {
     ctx.font = `700 ${FONT_SIZE}px ${getComputedStyle(document.body).fontFamily}`
     ctx.textBaseline = 'top'
     cellW = ctx.measureText('M').width || FONT_SIZE * 0.6
-    ink = getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim() || '#000'
-
     // Platz links und rechts neben dem Text
     const textWidth = Math.min(width, CONTENT_WIDTH) - CONTENT_PADDING * 2
     const band = (width - textWidth) / 2 - GAP
     const fit = Math.floor(band / cellW)
     cols = fit >= MIN_COLS ? Math.min(MAX_COLS, fit) : 0
+
+    // Verlauf: ganz außen Tinte (schwarz), ganz innen Papier (weiß), dazwischen Grautöne
+    const ink = readColor('--color-ink', [0, 0, 0])
+    const paper = readColor('--color-paper', [255, 255, 255])
+    shades = []
+    for (let c = 0; c < cols; c++) {
+      const t = cols > 1 ? Math.pow(c / (cols - 1), GRADIENT_GAMMA) : 0
+      const r = Math.round(ink[0] + (paper[0] - ink[0]) * t)
+      const g = Math.round(ink[1] + (paper[1] - ink[1]) * t)
+      const b = Math.round(ink[2] + (paper[2] - ink[2]) * t)
+      shades.push(`rgb(${r}, ${g}, ${b})`)
+    }
+
     draw(performance.now())
   }
 
