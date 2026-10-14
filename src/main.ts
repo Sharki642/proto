@@ -1,11 +1,6 @@
-import './style.css'
-import { initAscii } from './ascii'
+// Startseite (index.html)
+import { initPage } from './shared'
 
-// ASCII-Ränder links und rechts, die beim Scrollen mitwandern
-initAscii(document.querySelector<HTMLCanvasElement>('#ascii'))
+initPage()
 
-// Jahreszahl im Footer automatisch setzen
-const year = document.querySelector<HTMLElement>('#year')
-if (year) {
-  year.textContent = String(new Date().getFullYear())
-}
+// Hier kommt später Code hin, der nur auf der Startseite gebraucht wird.

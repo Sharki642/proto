@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Warum es Proto gibt: von einem Elektroniker für Elektroniker. Fertige Bausteine, damit aus einer Idee schnell ein Prototyp wird."
+    />
+    <link rel="icon" type="image/png" href="/fullicon.png" />
+    <title>Über Proto – Von einem Elektroniker für Elektroniker</title>
+  </head>
+
+  <body class="bg-paper text-ink font-sans antialiased">
+    <!-- ASCII-Ränder: werden in src/ascii.ts links und rechts neben den Inhalt gezeichnet -->
+    <canvas
+      id="ascii"
+      aria-hidden="true"
+      class="pointer-events-none fixed inset-0 z-30 h-full w-full"
+    ></canvas>
+
+    <!-- Pfeil, der unten in der Grafik mehrfach verwendet wird -->
+    <svg aria-hidden="true" class="absolute h-0 w-0">
+      <symbol id="arrow" viewBox="0 0 20 12">
+        <line x1="0" y1="6" x2="15" y2="6" stroke="currentColor" />
+        <polygon points="13,2.5 20,6 13,9.5" fill="currentColor" />
+      </symbol>
+    </svg>
+
+    <header class="sticky top-0 z-20 border-b border-line bg-paper/90 backdrop-blur">
+      <div class="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+        <a href="/" aria-label="Proto – zur Startseite">
+          <img src="/fullicon.png" alt="Proto" class="h-9 w-auto" />
+        </a>
+        <nav class="flex gap-5 text-xs sm:gap-8 sm:text-sm">
+          <a href="/ueber-proto.html" aria-current="page" class="underline underline-offset-4">
+            Über Proto
+          </a>
+          <a href="/#produkte" class="underline-offset-4 hover:underline">Produkte</a>
+          <a href="/#vision" class="underline-offset-4 hover:underline">Vision</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- Einleitung -->
+      <section class="mx-auto max-w-4xl px-6 pt-16 pb-16 md:pt-24 md:pb-20">
+        <h1
+          class="max-w-3xl text-4xl leading-[1.05] font-bold tracking-tight sm:text-5xl lg:text-6xl"
+        >
+          Von einem Elektroniker für Elektroniker.
+        </h1>
+        <p class="mt-8 max-w-prose text-muted">
+          Proto ist für kreative Elektroniker gemacht, die ihre Projekte gern schnell fertig haben.
+          Ich habe es gegründet, weil ich genau das selbst brauche.
+        </p>
+      </section>
+
+      <!-- Wo jedes Projekt anfängt -->
+      <section class="border-t border-line">
+        <div
+          class="mx-auto grid max-w-4xl gap-6 px-6 py-16 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12"
+        >
+          <h2 class="text-xl leading-snug font-bold">Wo jedes Projekt anfängt</h2>
+          <div class="space-y-4 text-muted">
+            <p>
+              Jedes neue Projekt beginnt gleich: mit einer Ladeschaltung für den Akku und einem
+              Mikrocontroller, der läuft. Erst danach geht es um die eigentliche Idee.
+            </p>
+            <p>Genau das hat mich selbst ständig Zeit gekostet.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Der Weg zum Prototyp -->
+      <section class="border-t border-line">
+        <div
+          class="mx-auto grid max-w-4xl gap-6 px-6 py-16 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12"
+        >
+          <h2 class="text-xl leading-snug font-bold">Der Weg zum Prototyp</h2>
+          <div class="space-y-8">
+            <div>
+              <p class="mb-3 text-sm text-muted">Ohne Proto</p>
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="border border-ink px-3 py-2">Idee</span>
+                <svg aria-hidden="true" class="h-3 w-5 shrink-0"><use href="#arrow" /></svg>
+                <span class="border border-dashed border-ink px-3 py-2">Ladeschaltung</span>
+                <svg aria-hidden="true" class="h-3 w-5 shrink-0"><use href="#arrow" /></svg>
+                <span class="border border-dashed border-ink px-3 py-2">Mikrocontroller</span>
+                <svg aria-hidden="true" class="h-3 w-5 shrink-0"><use href="#arrow" /></svg>
+                <span class="border border-ink px-3 py-2">Prototyp</span>
+              </div>
+            </div>
+
+            <div>
+              <p class="mb-3 text-sm text-muted">Mit Proto</p>
+              <div class="flex flex-wrap items-center gap-2 text-xs">
+                <span class="border border-ink px-3 py-2">Idee</span>
+                <svg aria-hidden="true" class="h-3 w-5 shrink-0"><use href="#arrow" /></svg>
+                <span class="border border-ink bg-ink px-3 py-2 text-paper">Proto-Bausteine</span>
+                <svg aria-hidden="true" class="h-3 w-5 shrink-0"><use href="#arrow" /></svg>
+                <span class="border border-ink px-3 py-2">Prototyp</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Was Proto daran ändert -->
+      <section class="border-t border-line">
+        <div
+          class="mx-auto grid max-w-4xl gap-6 px-6 py-16 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12"
+        >
+          <h2 class="text-xl leading-snug font-bold">Was Proto daran ändert</h2>
+          <p class="text-muted">
+            Proto liefert diese Grundlagen fertig: eine Akku-Ladeschaltung, ein eigenes
+            ESP32-Dev-Modul und weitere Bausteine, die dir wiederkehrende Arbeit abnehmen. So
+            kannst du sehr schnell Prototypen bauen.
+          </p>
+        </div>
+      </section>
+
+      <!-- Für wen -->
+      <section class="border-t border-line">
+        <div
+          class="mx-auto grid max-w-4xl gap-6 px-6 py-16 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12"
+        >
+          <h2 class="text-xl leading-snug font-bold">Für wen es gemacht ist</h2>
+          <div class="space-y-4 text-muted">
+            <p>
+              Für kreative Elektroniker, die lieber ihre Idee umsetzen, als die Grundlagen noch
+              einmal zu bauen.
+            </p>
+            <p>
+              Ich nehme an, dass es vielen da draußen genauso geht wie mir. Deshalb gibt es Proto.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Weiter geht's -->
+      <section class="border-t border-line">
+        <div class="mx-auto flex max-w-4xl flex-wrap gap-3 px-6 py-16 md:py-20">
+          <a href="/#produkte" class="btn btn-solid">Produkte ansehen</a>
+          <a href="/" class="btn btn-line">Zur Startseite</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-line">
+      <div
+        class="mx-auto flex max-w-4xl flex-col gap-4 px-6 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p>© <span id="year"></span> Proto</p>
+        <nav class="flex gap-6">
+          <a href="#" class="underline-offset-4 hover:text-ink hover:underline">Impressum</a>
+          <a href="#" class="underline-offset-4 hover:text-ink hover:underline">Datenschutz</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/ueber-proto.ts"></script>
+  </body>
+</html>
